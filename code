@@ -1,0 +1,83 @@
+#include <iostream>
+
+int items[100000]
+
+int[] quantiles(int *items, int begin, int end, int k)
+{
+    index = median_index(len(items));
+
+    if (k == 1)
+        return [];
+    else if(k%2)
+    {
+        n = len(items)
+        left_index  = math.ceil((k/2-1) * (n/k)) - 1;
+        right_index = n - left_index - 1;
+
+        left  = select(items, left_index);
+        right = select(items, right_index);
+
+        partition(items, 0, left);
+        lower = k_quantiles(items, 0, left, k/2-1);
+        partition(items, right, n);
+        upper = k_quantiles(items, right+1, n, k/2-1);
+
+        return lower + [left, right] + upper;
+    }
+    else
+    {
+        n = len(items)
+        index = median_index(n);
+        median = select(items, index);
+        partition(items, 0, median);
+
+        return k_quantiles(items, 0, index, k/2-1) +  [median] + k_quantiles(items, index+1, n, k/2-1);
+    }
+}
+int median_index(int n){
+    if n % 2
+        return n/2;
+    else:
+        return n/2 - 1;
+}
+int partition(int *items, int head, int tail) {
+    int x, i, j, tmp;
+    x = A[tail-1];
+    i = head;
+    for (j=head; j<tail-1; j++) {
+        if (A[j] <= x) {
+            tmp = A[i];
+            A[i] = A[j];
+            A[j] = tmp;
+            i++;
+        }
+    }
+
+    tmp = A[i];
+    A[i] = A[tail-1];
+    A[tail-1] = tmp;
+
+    return i;
+}
+int select(int *items, int n)
+    if (len(items) <= 1)
+        return items[0];
+
+    medians = 0;
+    
+    for(int i=0; i<len(items); i+5)
+    {
+        group = sorted(items[i]);
+        items[i] = group;
+        median = group[median_index(len(group))];
+        medians.append(median);
+    }
+    pivot = select(medians, median_index(len(medians)));
+    index = partition(items, 0, pivot);
+
+    if n == index
+        return items[index];
+    else if (n < index)
+        return select(items, 0, index, n);
+    else:
+        return select(items, index+1, n, n - index - 1);
